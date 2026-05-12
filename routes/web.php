@@ -27,10 +27,7 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']); 
 
 // Logout
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Submit Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout']); 
 
 // Charts
 Route::get('/admin/dashboard', [AuthController::class, 'getDashboard'])->name('admin.dashboard');
