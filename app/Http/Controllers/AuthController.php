@@ -34,6 +34,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'gender' => $request->gender,
             'role' => 'User',
+            'status' => 'Active',
         ]);
 
         session(['user' => $user]);
