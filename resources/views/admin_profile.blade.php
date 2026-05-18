@@ -29,6 +29,19 @@
       #sidebar { display: none; }
       .content-area { width: 100%; }
     }
+    .inner-toast {
+      width: 100% !important;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      background-color: #f38888 !important;
+      color: #8a1616 !important; 
+      box-shadow: none !important;
+    }
+    .inner-toast-success {
+      background-color: #d1e7dd !important;
+      color: #0f5132 !important;
+      box-shadow: none !important;
+    }
     #sidebar .nav-link { padding: 12px 20px; margin: 5px 15px; transition: 0.3s; }
     #sidebar .nav-link:hover, #sidebar .nav-link.active { background: rgba(255,255,255,0.1); }
     .btn-jeane { background-color: #8a1616 !important; }  
