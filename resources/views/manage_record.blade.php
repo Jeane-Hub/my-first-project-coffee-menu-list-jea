@@ -146,6 +146,20 @@
                         </div>
                     </div>
 
+                    <!-- Search Input Form for Admin -->
+                    <div class="mb-3">
+                        <form action="{{ route('admin.manage.record') }}" method="GET" class="d-flex" style="max-width: 300px;">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Search for coffee..." value="{{ $search ?? '' }}">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                
+                                @if(request()->filled('search'))
+                                    <a href="{{ route('admin.manage.record') }}" class="btn btn-danger d-flex align-items-center justify-content-center" style="padding: 0 12px; text-decoration: none;">X</a>
+                                @endif
+                            </div>
+                        </form>
+                    </div>
+
                     <!-- Read Table Section -->
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-5">

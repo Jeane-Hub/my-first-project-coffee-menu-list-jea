@@ -17,14 +17,20 @@ class MenuController extends Controller
     }
 
     // Manage Record
-    public function adminIndex() {
+    public function adminIndex(\Illuminate\Http\Request $request) {
         // Check Role
         if (!session('user') || session('user')->role !== 'Admin') {
             return redirect()->route('login')->with('error', 'Unauthorized access!');
         }
 
-        $menus = Menu::all();
-        return view('manage_record', compact('menus'));
+        //Find admin input in search bar
+        $search = $request->input('search');
+        $menus = Menu::when($search, function ($query, $search) {
+            return $query->where('name', 'like', "%{$search}%")
+                         ->orWhere('category', 'like', "%{$search}%");
+        })->get();
+
+        return view('manage_record', compact('menus', 'search'));
     }
 
     // Store Record
