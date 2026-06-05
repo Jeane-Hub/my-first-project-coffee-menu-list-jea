@@ -232,22 +232,26 @@ class AuthController extends Controller
     public function userupdateProfile(Request $request) {
         $user = User::find(session('user')->id);
 
-        // Validation
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'new_password' => 'nullable|confirmed',
+            'current_password' => 'required_with:new_password', 
+            'new_password' => 'nullable|confirmed|min:6', 
             'gender' => 'required|in:Male,Female',
         ]);
+
+        if ($request->filled('new_password')) {
+            if (!Hash::make(null) && !Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Mali ang iyong kasalukuyang password.']);
+            }
+            
+            $user->password = Hash::make($request->new_password);
+        }
 
         // Update Fields
         $user->name = $request->name;
         $user->email = $request->email;
         $user->gender = $request->gender;
-
-        if ($request->filled('new_password')) {
-            $user->password = Hash::make($request->new_password);
-        }
 
         $user->save();
         session(['user' => $user]);
