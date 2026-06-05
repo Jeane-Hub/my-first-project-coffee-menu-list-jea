@@ -165,27 +165,30 @@ class AuthController extends Controller
 
     // Admin Update Information (Name, Email, Password)
     public function updateProfile(Request $request) {
-        $user = User::find(session('user')->id);
+    $user = User::find(session('user')->id);
 
-        // Validation
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'new_password' => 'nullable|confirmed',
-        ]);
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'current_password' => 'required_with:new_password',
+        'new_password' => 'nullable|confirmed|min:6',
+    ]);
 
-        // Update fields
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->gender = $request->gender;
-
-        if ($request->filled('new_password')) {
-            $user->password = Hash::make($request->new_password);
+    if ($request->filled('new_password')) {
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
         }
+        
+        $user->password = Hash::make($request->new_password);
+    }
 
-        $user->save();
-        session(['user' => $user]);
-        return back()->with('success', 'Profile information updated!');
+    $user->name = $request->name;
+    $user->email = $request->email;
+
+    $user->save();
+    session(['user' => $user]);
+    return back()->with('success', 'Profile information updated!');
+
     }
 
     // Admin Profile Upload
@@ -230,32 +233,32 @@ class AuthController extends Controller
 
     // User Update Information (Name, Email, Password)
     public function userupdateProfile(Request $request) {
-        $user = User::find(session('user')->id);
+    $user = User::find(session('user')->id);
 
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'current_password' => 'required_with:new_password', 
-            'new_password' => 'nullable|confirmed|min:6', 
-            'gender' => 'required|in:Male,Female',
-        ]);
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'current_password' => 'required_with:new_password', 
+        'new_password' => 'nullable|confirmed|min:6', 
+        'gender' => 'required|in:Male,Female',
+    ]);
 
-        if ($request->filled('new_password')) {
-            if (!Hash::make(null) && !Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Mali ang iyong kasalukuyang password.']);
-            }
-            
-            $user->password = Hash::make($request->new_password);
+    if ($request->filled('new_password')) {
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
         }
+        
+        $user->password = Hash::make($request->new_password);
+    }
 
-        // Update Fields
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->gender = $request->gender;
+    $user->name = $request->name;
+    $user->email = $request->email;
+    $user->gender = $request->gender;
 
-        $user->save();
-        session(['user' => $user]);
-        return back()->with('success', 'Profile information updated!');
+    $user->save();
+    session(['user' => $user]);
+    return back()->with('success', 'Profile information updated!');
+    
     }
 
     // User Profile Upload
