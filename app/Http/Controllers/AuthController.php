@@ -171,7 +171,7 @@ class AuthController extends Controller
         'name' => 'required',
         'email' => 'required|email|unique:users,email,' . $user->id,
         'current_password' => 'required_with:new_password',
-        'new_password' => 'nullable|confirmed|min:6',
+        'new_password' => 'nullable|confirmed',
     ]);
 
     if ($request->filled('new_password')) {
@@ -239,7 +239,7 @@ class AuthController extends Controller
         'name' => 'required',
         'email' => 'required|email|unique:users,email,' . $user->id,
         'current_password' => 'required_with:new_password', 
-        'new_password' => 'nullable|confirmed|min:6', 
+        'new_password' => 'nullable|confirmed', 
         'gender' => 'required|in:Male,Female',
     ]);
 
